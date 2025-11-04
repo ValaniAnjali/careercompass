@@ -14,7 +14,7 @@ Career Compass is a comprehensive web application designed to guide users throug
 ---
 
 ## Features
-
+(Currently in progress )
 * **Personalized Roadmaps:** Users can get career roadmaps based on the role they are interested in.
 * **Skill Guidance:** Users can view skills required for specific roles.
 * **Course Recommendations:** Suggests courses to enhance user skills based on their interests.
@@ -64,11 +64,7 @@ Currently, the **signup, login, and resume generation** features have been compl
 Contributions are welcome! Feel free to open issues or submit pull requests.
 Please make sure your code follows the existing style and is well-documented.
 
----
 
-## License
-
-This project is licensed under the MIT License.
 
 ---
 
