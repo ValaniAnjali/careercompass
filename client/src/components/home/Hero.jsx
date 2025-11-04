@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
-       const {user}= useSelector(state=>state.auth)
-      const [menuOpen, setMenuOpen] = React.useState(false);
+    const { user } = useSelector(state => state.auth)
+    const [menuOpen, setMenuOpen] = React.useState(false);
 
     const logos = [
         'https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg',
@@ -13,13 +13,16 @@ const Hero = () => {
         'https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg',
         'https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg',
     ]
-  return (
+    return (
         <>
             <div className="min-h-screen pb-20">
                 {/* Navbar */}
                 <nav className="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-40 text-sm">
                     <a href="https://prebuiltui.com">
-                        <img src='./logo.svg' alt='logo' className='h-11 w-auto'/>
+                        {/* <img src='./logo' alt='logo' className='h-11 w-auto'/> */}
+                        <h3 className="text-xl  font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500 text-center tracking-wide">
+                            Career  Compass
+                        </h3>
                     </a>
 
                     <div className="hidden md:flex items-center gap-8 transition duration-500 text-slate-800">
@@ -37,7 +40,7 @@ const Hero = () => {
                             Login
                         </Link>
                         <Link to='/app' className='hidden md:block px-8 py-2 bg-purple-500 hover:bg-purple-700 activr:scale-95 transition-all rounded-full text-white' hidden={!user}>
-                        Dashboard
+                            Dashboard
                         </Link>
                     </div>
 
@@ -92,7 +95,7 @@ const Hero = () => {
 
                     <p className="max-w-md text-center text-base my-7">
                         create, edit and download professional resumes with AI-powered assistance.
-                        </p>
+                    </p>
 
                     {/* CTA Buttons */}
                     <div className="flex items-center gap-4 ">

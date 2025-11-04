@@ -15,6 +15,7 @@ import api from './configs/api'
 import { login, setLoading } from './app/features/authSlice'
 import {Toaster} from 'react-hot-toast'
 import { useEffect } from 'react'
+import Profile from './components/Profile'
 
 
 function App() {
@@ -49,10 +50,13 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='app' element={<Layout/>}>
           <Route index element={<Dashboard/>}/>
+          <Route path='profile' element={<Profile />} />
           <Route path='builder/:resumeId' element={<ResumeBuilder/>}/>
+           
         </Route>
 
         <Route path='view/:resumeId' element={<Preview/>}/>
+        
         
       </Routes>
     </>
