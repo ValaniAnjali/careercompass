@@ -8,7 +8,7 @@ Career Compass is a comprehensive web application designed to guide users throug
 
 * **Frontend:** React.js, Tailwind CSS
 * **Backend:** Node.js, Express.js
-* **Database:** Firebase
+* **Database:** MongoDB
 * **Hosting:** Render, Vercel, or Netlify
 
 ---
