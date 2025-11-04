@@ -6,7 +6,7 @@ const generateToken=(userId)=>{
     const token=jwt.sign({userId},process.env.JWT_SECRET,{expiresIn:'7d'})
     return token;
 }
-
+//controller
 //controller for user registration
 //POST: /api/users/register
 export const registerUser = async (req, res) => {
