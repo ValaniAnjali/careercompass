@@ -193,7 +193,9 @@ const saveResume=async()=>{
                   }
               </div>
 
-                  <button onClick={()=>{toast.promise(saveResume,{loading:'Saving...'})}} className='bg-gradient-to-br from-purple-100 to-purple-200 ring-purple-300 text-purple-600 ring hover:ring-purple-400 transition-all rounded-md px-6 py-2 mt-6 text-sm '>Save Changes</button>
+                  <button onClick={()=>{toast.promise(saveResume,{loading:'Saving...'})}} className='bg-gradient-to-br from-purple-100 to-purple-200 ring-purple-300 text-purple-600 ring hover:ring-purple-400 transition-all rounded-md px-6 py-2 mt-6 text-sm '>
+                    Save Changes            
+                  </button>
 
             </div>
 

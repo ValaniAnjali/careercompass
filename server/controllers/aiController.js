@@ -22,7 +22,7 @@ export const enhanceProfessionalSummary = async (req, res) => {
             ],
         });
 
-        const enhancedContent=response.choice[0].message.content;
+        const enhancedContent=response.choices[0].message.content;
         return res.status(200).json({enhancedContent})
     } catch (error) {
         return res.status(400).json({message:error.message})
@@ -49,7 +49,7 @@ export const enhanceJobDescription = async (req, res) => {
             ],
         });
 
-        const enhancedContent=response.choice[0].message.content;
+        const enhancedContent=response.choices[0].message.content;
         return res.status(200).json({enhancedContent})
     } catch (error) {
         return res.status(400).json({message:error.message})
@@ -128,7 +128,7 @@ export const uploadResume = async (req, res) => {
             response_format:{type:'json_object'}
         });
 
-        const extractedData=response.choice[0].message.content;
+        const extractedData=response.choices[0].message.content;
         const parsedData=JSON.parse(extractedData)
         const newResume=await Resume.create({userId,title,...parsedData})
         res.json({resumeId:newResume._id})
