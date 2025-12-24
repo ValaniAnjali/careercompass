@@ -1,6 +1,5 @@
 import {
   FilePenLineIcon,
-  LoaderCircleIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -8,33 +7,33 @@ import {
   UploadCloudIcon,
   XIcon,
   BookOpenIcon,
-  ClipboardListIcon
-} from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import api from '../configs/api'
-import toast from 'react-hot-toast'
-import pdfToText from 'react-pdftotext'
+  ClipboardListIcon,
+} from "lucide-react"
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import api from "../configs/api"
+import toast from "react-hot-toast"
+import pdfToText from "react-pdftotext"
 
 const Dashboard = () => {
-  const { user, token } = useSelector(state => state.auth)
+  const { user, token } = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  const colors = ['#a78bfa', '#fbbf24', '#f87171', '#38bdf8', '#4ade80']
   const [allResumes, setAllResumes] = useState([])
   const [showCreateResume, setShowCreateResume] = useState(false)
   const [showUploadResume, setShowUploadResume] = useState(false)
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState("")
   const [resume, setResume] = useState(null)
-  const [editResumeId, setEditResumeId] = useState('')
+  const [editResumeId, setEditResumeId] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  // ---------------- API Calls ----------------
+  /* ---------------- API Calls ---------------- */
+
   const loadAllResumes = async () => {
     try {
-      const { data } = await api.get('/api/users/resumes', {
-        headers: { Authorization: token }
+      const { data } = await api.get("/api/users/resumes", {
+        headers: { Authorization: token },
       })
       setAllResumes(data.resumes)
     } catch (error) {
@@ -42,16 +41,16 @@ const Dashboard = () => {
     }
   }
 
-  const createResume = async e => {
+  const createResume = async (e) => {
+    e.preventDefault()
     try {
-      e.preventDefault()
       const { data } = await api.post(
-        '/api/resumes/create',
+        "/api/resumes/create",
         { title },
         { headers: { Authorization: token } }
       )
       setAllResumes([...allResumes, data.resume])
-      setTitle('')
+      setTitle("")
       setShowCreateResume(false)
       navigate(`/app/builder/${data.resume._id}`)
     } catch (error) {
@@ -59,17 +58,17 @@ const Dashboard = () => {
     }
   }
 
-  const uploadResume = async e => {
+  const uploadResume = async (e) => {
     e.preventDefault()
     setIsLoading(true)
     try {
       const resumeText = await pdfToText(resume)
       const { data } = await api.post(
-        '/api/resumes/upload-resume',
+        "/api/resumes/upload-resume",
         { title, resumeText },
         { headers: { Authorization: token } }
       )
-      setTitle('')
+      setTitle("")
       setResume(null)
       setShowUploadResume(false)
       navigate(`/app/builder/${data.resumeId}`)
@@ -79,37 +78,35 @@ const Dashboard = () => {
     setIsLoading(false)
   }
 
-  const editTitle = async e => {
+  const editTitle = async (e) => {
+    e.preventDefault()
     try {
-      e.preventDefault()
       const { data } = await api.put(
         `/api/resumes/update`,
         { resumeId: editResumeId, resumeData: { title } },
         { headers: { Authorization: token } }
       )
       setAllResumes(
-        allResumes.map(res =>
-          res._id === editResumeId ? { ...res, title } : res
+        allResumes.map((r) =>
+          r._id === editResumeId ? { ...r, title } : r
         )
       )
-      setTitle('')
-      setEditResumeId('')
+      setTitle("")
+      setEditResumeId("")
       toast.success(data.message)
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message)
     }
   }
 
-  const deleteResume = async resumeId => {
+  const deleteResume = async (resumeId) => {
+    if (!window.confirm("Delete this resume?")) return
     try {
-      if (window.confirm('Are you sure you want to delete this resume?')) {
-        const { data } = await api.delete(
-          `/api/resumes/delete/${resumeId}`,
-          { headers: { Authorization: token } }
-        )
-        setAllResumes(allResumes.filter(r => r._id !== resumeId))
-        toast.success(data.message)
-      }
+      const { data } = await api.delete(`/api/resumes/delete/${resumeId}`, {
+        headers: { Authorization: token },
+      })
+      setAllResumes(allResumes.filter((r) => r._id !== resumeId))
+      toast.success(data.message)
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message)
     }
@@ -119,186 +116,168 @@ const Dashboard = () => {
     loadAllResumes()
   }, [])
 
-  // ---------------- UI ----------------
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200">
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
+    <div className="min-h-screen bg-[#F1FBFA] text-slate-800">
+      <div className="max-w-7xl mx-auto px-6 py-10 space-y-10">
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h1 className="text-2xl font-semibold">
-            Welcome, {user?.name || 'Anjali V'}
-          </h1>
+        {/* HEADER */}
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold text-slate-900">
+              Welcome back, {user?.name || "Anjali"}
+            </h1>
+            <p className="text-slate-600 text-sm mt-1">
+              Your personal career workspace
+            </p>
+          </div>
 
-          <div className="flex gap-3">
-            <div className="flex items-center gap-3 bg-slate-800 border border-slate-700 px-4 py-3 rounded-md">
-              <FilePenLineIcon className="text-purple-400" />
-              <div>
-                <p className="text-xs text-slate-400">Resumes</p>
-                <p className="font-medium">{allResumes.length}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 bg-slate-800 border border-slate-700 px-4 py-3 rounded-md">
-              <BookOpenIcon className="text-blue-400" />
-              <div>
-                <p className="text-xs text-slate-400">Questions</p>
-                <p className="font-medium">42</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 bg-slate-800 border border-slate-700 px-4 py-3 rounded-md">
-              <ClipboardListIcon className="text-green-400" />
-              <div>
-                <p className="text-xs text-slate-400">Resources</p>
-                <p className="font-medium">12</p>
-              </div>
-            </div>
+          <div className="flex gap-4">
+            <Stat icon={FilePenLineIcon} label="Resumes" value={allResumes.length} />
+            <Stat icon={BookOpenIcon} label="Questions" value="42" />
+            <Stat icon={ClipboardListIcon} label="Resources" value="12" />
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {[
-            { label: 'Create', icon: PlusIcon, onClick: () => setShowCreateResume(true) },
-            { label: 'Upload', icon: UploadCloudIcon, onClick: () => setShowUploadResume(true) },
-            { label: 'Questions', icon: FilePenLineIcon, onClick: () => navigate('/app/interview-questions') },
-            { label: 'Submit', icon: UploadCloudIcon, onClick: () => navigate('/app/submit-question') },
-            { label: 'Roadmap', icon: FilePenLineIcon, onClick: () => navigate('/app/roadmap-finder') },
-            { label: 'Resources', icon: UploadCloud, onClick: () => navigate('/app/resources') }
-          ].map((item, i) => (
-            <button
-              key={i}
-              onClick={item.onClick}
-              className="bg-slate-800 border border-slate-700 rounded-md p-4 flex flex-col items-center gap-2 hover:bg-slate-700 transition"
-            >
-              <item.icon className="size-6 text-slate-300" />
-              <span className="text-xs text-slate-400">{item.label}</span>
-            </button>
-          ))}
+        {/* ACTION CARDS */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+          <ActionCard icon={PlusIcon} label="Create Resume" onClick={() => setShowCreateResume(true)} />
+          <ActionCard icon={UploadCloudIcon} label="Upload Resume" onClick={() => setShowUploadResume(true)} />
+          <ActionCard icon={FilePenLineIcon} label="Questions" onClick={() => navigate("/app/interview-questions")} />
+          <ActionCard icon={UploadCloud} label="Submit Question" onClick={() => navigate("/app/submit-question")} />
+          <ActionCard icon={FilePenLineIcon} label="Roadmap" onClick={() => navigate("/app/roadmap-finder")} />
+          <ActionCard icon={BookOpenIcon} label="Resources" onClick={() => navigate("/app/resources")} />
         </div>
 
-        {/* Resumes */}
+        {/* RESUMES */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">My Resumes</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allResumes.map((resume, index) => {
-              const color = colors[index % colors.length]
-              return (
-                <div
-                  key={resume._id}
-                  onClick={() => navigate(`/app/builder/${resume._id}`)}
-                  className="group bg-slate-800 border border-slate-700 rounded-md p-4 cursor-pointer hover:bg-slate-700 transition"
-                >
-                  <div className="flex justify-between">
-                    <FilePenLineIcon style={{ color }} />
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                      <TrashIcon
-                        onClick={e => {
-                          e.stopPropagation()
-                          deleteResume(resume._id)
-                        }}
-                        className="size-5 p-1 hover:bg-slate-600 rounded"
-                      />
-                      <PencilIcon
-                        onClick={e => {
-                          e.stopPropagation()
-                          setEditResumeId(resume._id)
-                          setTitle(resume.title)
-                        }}
-                        className="size-5 p-1 hover:bg-slate-600 rounded"
-                      />
-                    </div>
+          <h2 className="text-xl font-semibold mb-4 text-slate-900">
+            My Resumes
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            {allResumes.map((resume) => (
+              <div
+                key={resume._id}
+                onClick={() => navigate(`/app/builder/${resume._id}`)}
+                className="group relative rounded-xl p-5 cursor-pointer
+                bg-white border border-slate-200
+                hover:border-teal-600 hover:shadow-lg transition-all"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="p-2 rounded-lg bg-teal-50">
+                    <FilePenLineIcon className="size-6 text-teal-700" />
                   </div>
 
-                  <p className="mt-4 font-medium truncate">{resume.title}</p>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Updated {new Date(resume.updatedAt).toLocaleDateString()}
-                  </p>
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                    <TrashIcon
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        deleteResume(resume._id)
+                      }}
+                      className="size-5 text-slate-400 hover:text-red-500"
+                    />
+                    <PencilIcon
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setEditResumeId(resume._id)
+                        setTitle(resume.title)
+                      }}
+                      className="size-5 text-slate-400 hover:text-teal-600"
+                    />
+                  </div>
                 </div>
-              )
-            })}
+
+                <p className="mt-4 font-medium text-slate-900 truncate">
+                  {resume.title}
+                </p>
+                <p className="text-xs text-slate-500 mt-1">
+                  Updated {new Date(resume.updatedAt).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* ---------------- Modals (LOGIC UNTOUCHED) ---------------- */}
-        {showCreateResume && (
-          <form
-            onSubmit={createResume}
-            onClick={() => setShowCreateResume(false)}
-            className="fixed inset-0 bg-black/70 flex items-center justify-center z-10"
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              className="bg-slate-800 border border-slate-700 rounded-md p-6 w-full max-w-sm"
-            >
-              <h2 className="font-semibold mb-4">Create Resume</h2>
-              <input
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded mb-4"
-                placeholder="Resume title"
-                required
-              />
-              <button className="w-full bg-purple-600 py-2 rounded">Create</button>
-              <XIcon
-                onClick={() => setShowCreateResume(false)}
-                className="absolute top-4 right-4 cursor-pointer"
-              />
-            </div>
-          </form>
-        )}
-
-        {showUploadResume && (
-          <form
-            onSubmit={uploadResume}
-            onClick={() => setShowUploadResume(false)}
-            className="fixed inset-0 bg-black/70 flex items-center justify-center z-10"
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              className="bg-slate-800 border border-slate-700 rounded-md p-6 w-full max-w-sm"
-            >
-              <h2 className="font-semibold mb-4">Upload Resume</h2>
-              <input
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded mb-4"
-                placeholder="Resume title"
-                required
-              />
-              <input type="file" accept=".pdf" onChange={e => setResume(e.target.files[0])} />
-              <button className="w-full bg-purple-600 py-2 rounded mt-4">
-                {isLoading ? 'Uploading...' : 'Upload'}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {editResumeId && (
-          <form
-            onSubmit={editTitle}
-            onClick={() => setEditResumeId('')}
-            className="fixed inset-0 bg-black/70 flex items-center justify-center z-10"
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              className="bg-slate-800 border border-slate-700 rounded-md p-6 w-full max-w-sm"
-            >
-              <h2 className="font-semibold mb-4">Edit Title</h2>
-              <input
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded mb-4"
-                required
-              />
-              <button className="w-full bg-purple-600 py-2 rounded">Update</button>
-            </div>
-          </form>
-        )}
       </div>
+
+      {/* MODALS */}
+      {showCreateResume && (
+        <Modal title="Create Resume" onClose={() => setShowCreateResume(false)} onSubmit={createResume} button="Create">
+          <Input value={title} onChange={setTitle} />
+        </Modal>
+      )}
+
+      {showUploadResume && (
+        <Modal title="Upload Resume" onClose={() => setShowUploadResume(false)} onSubmit={uploadResume} button={isLoading ? "Uploading..." : "Upload"}>
+          <Input value={title} onChange={setTitle} />
+        </Modal>
+      )}
+
+      {editResumeId && (
+        <Modal title="Edit Resume" onClose={() => setEditResumeId("")} onSubmit={editTitle} button="Update">
+          <Input value={title} onChange={setTitle} />
+        </Modal>
+      )}
     </div>
   )
 }
+
+/* ---------------- SMALL COMPONENTS ---------------- */
+
+const Stat = ({ icon: Icon, label, value }) => (
+  <div className="bg-white border border-slate-200 rounded-xl px-4 py-3 flex gap-3 items-center">
+    <Icon className="size-5 text-teal-700" />
+    <div>
+      <p className="text-xs text-slate-500">{label}</p>
+      <p className="font-semibold text-slate-900">{value}</p>
+    </div>
+  </div>
+)
+
+const ActionCard = ({ icon: Icon, label, onClick }) => (
+  <button
+    onClick={onClick}
+    className="rounded-xl p-4 bg-white border border-slate-200
+    hover:border-teal-600 hover:shadow-md transition-all text-left"
+  >
+    <div className="p-2 w-fit rounded-lg bg-teal-50 mb-3">
+      <Icon className="size-5 text-teal-700" />
+    </div>
+    <p className="text-sm font-medium text-slate-900">{label}</p>
+  </button>
+)
+
+const Modal = ({ title, children, onClose, onSubmit, button }) => (
+  <form
+    onSubmit={onSubmit}
+    onClick={onClose}
+    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center"
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="relative bg-white border border-slate-200 rounded-xl p-6 w-full max-w-sm"
+    >
+      <h2 className="text-lg font-semibold mb-4 text-slate-900">{title}</h2>
+      {children}
+      <button className="w-full mt-4 py-2 rounded bg-teal-700 text-white hover:bg-teal-800">
+        {button}
+      </button>
+      <XIcon
+        onClick={onClose}
+        className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer"
+      />
+    </div>
+  </form>
+)
+
+const Input = ({ value, onChange }) => (
+  <input
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    placeholder="Enter title"
+    className="w-full px-4 py-2 rounded border border-slate-300
+    focus:outline-none focus:ring-2 focus:ring-teal-600"
+    required
+  />
+)
 
 export default Dashboard
