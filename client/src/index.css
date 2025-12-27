@@ -8,11 +8,25 @@
     @apply cursor-pointer
   }
   input:not([type="checkbox"]){
-    @apply outline-none focus:ring border border-gray-300 
+    @apply outline-none focus:ring border border-gray-300
     focus:ring-blue-500 focus:border-blue-500 rounded-lg
   }
   textarea{
     @apply outline-none focus:ring border border-gray-300
     focus:ring-blue-500 focus:border-blue-500 rounded-lg resize-none;
   }
+}
+
+/* Custom animations */
+@keyframes spin-slow {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }
