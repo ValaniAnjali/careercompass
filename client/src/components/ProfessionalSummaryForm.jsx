@@ -29,10 +29,10 @@ const ProfessionalSummaryForm = ({data,onChange,setResumeData}) => {
     <div className='space-y-4'>
         <div className='flex items-center justify-between'>
             <div>
-                <h3 className='flex items-center gap-2 text-lg font-semibold text-gray-900'>Professional Summary</h3>
-                <p className='text-sm text-gray-500'>Add summary for your resume here</p>
+                <h3 className='flex items-center gap-2 text-lg font-semibold text-white'>Professional Summary</h3>
+                <p className='text-sm text-[#9AA4C7]'>Add summary for your resume here</p>
             </div>
-            <button disabled={isGenerating} onClick={generateSummary} className='flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50'>
+            <button disabled={isGenerating} onClick={generateSummary} className='flex items-center gap-2 px-3 py-1 text-sm bg-linear-to-r from-[#FF7700]/20 to-[#FFA600]/20 text-[#FF7700] border border-[#FF7700]/30 rounded hover:from-[#FF7700]/30 hover:to-[#FFA600]/30 transition-all duration-300 disabled:opacity-50'>
                 {isGenerating?(
                     <Loader2 className='size-4 animate-spin'/>
                 ):(
@@ -43,9 +43,9 @@ const ProfessionalSummaryForm = ({data,onChange,setResumeData}) => {
         </div>
 
         <div className='mt-6'>
-            <textarea value={data||""} onChange={(e)=>onChange(e.target.value)} rows={7} className='w-full p-3 px-4 mt-2 border text-sm border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none' placeholder='write a summary that highlights your key strenghts and career objectives... '/>
+            <textarea value={data||""} onChange={(e)=>onChange(e.target.value)} rows={7} className='w-full p-3 px-4 mt-2 border border-[#1B2256]/50 bg-[#010018]/50 text-white placeholder-[#9AA4C7] text-sm rounded-lg focus:ring-2 focus:ring-[#8DB2D4]/50 focus:border-[#8DB2D4]/50 outline-none transition-all resize-none' placeholder='write a summary that highlights your key strenghts and career objectives... '/>
 
-            <p className='text-xs text-gray-500 max-w-4/5 mx-auto text-center'>
+            <p className='text-xs text-[#6B7280] max-w-4/5 mx-auto text-center'>
                 Tip:Keep it concise (3-4 sentences) and focus on your most relevant achievements and skills.
             </p>               
         </div>

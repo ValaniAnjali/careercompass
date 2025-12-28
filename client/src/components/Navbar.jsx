@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full z-50 bg-[#010018] border-b border-[#1B2256] shadow-lg">
+    <nav className="fixed w-full z-50 bg-[#010018]/95 backdrop-blur-md border-b-2 border-[#1B2256] shadow-2xl">
       <div className="flex items-center justify-between max-w-7xl mx-auto px-6 py-4 text-[#E6ECF2]">
         <Link to="/" className="flex items-center gap-2">
           {/* Logo or text */}
@@ -32,7 +32,7 @@ const Navbar = () => {
           </Link>
           <button
             onClick={logoutUser}
-            className="bg-[#FF7700] text-black px-5 py-1.5 rounded-lg font-semibold hover:opacity-90 active:scale-95 transition-all"
+            className="bg-[#FF7700] text-black px-5 py-2 rounded-lg font-semibold hover:opacity-90 active:scale-95 transition-all border-2 border-[#FF7700]"
           >
             Logout
           </button>
