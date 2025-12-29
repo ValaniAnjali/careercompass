@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
-import pdfToText from "react-pdftotext";
+// import pdfToText from "react-pdftotext";
 
 const Dashboard = () => {
   const { user, token } = useSelector((state) => state.auth);
@@ -91,6 +91,43 @@ const Dashboard = () => {
     }
     setIsLoading(false);
   };
+  {
+    /* ---------------- CHATBOT ---------------- */
+  }
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+
+  const sendChatMessage = async () => {
+    if (!chatInput.trim()) return;
+    const userMsg = { role: "user", content: chatInput };
+    setChatMessages([...chatMessages, userMsg]);
+    setChatInput("");
+    setChatLoading(true);
+
+    try {
+      const { data } = await api.post(
+        "/api/chatbot",
+        { message: userMsg.content },
+        { headers: { Authorization: token } }
+      );
+      setChatMessages((prev) => [
+        ...prev,
+        { role: "bot", content: data.reply },
+      ]);
+    } catch (err) {
+      setChatMessages((prev) => [
+        ...prev,
+        { role: "bot", content: "AI error occurred" },
+      ]);
+    }
+
+    setChatLoading(false);
+  };
+  useEffect(() => {
+    const chatContainer = document.getElementById("chat-container");
+    if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, [chatMessages]);
 
   const editTitle = async (e) => {
     e.preventDefault();
@@ -101,9 +138,7 @@ const Dashboard = () => {
         { headers: { Authorization: token } }
       );
       setAllResumes(
-        allResumes.map((r) =>
-          r._id === editResumeId ? { ...r, title } : r
-        )
+        allResumes.map((r) => (r._id === editResumeId ? { ...r, title } : r))
       );
       setTitle("");
       setEditResumeId("");
@@ -145,7 +180,9 @@ const Dashboard = () => {
         <div className="text-center space-y-8">
           <div className="inline-flex items-center gap-3 px-6 py-3 bg-[#FF7700] border border-[#FF7700] rounded-full">
             <SparklesIcon className="size-5 text-black" />
-            <span className="text-black font-semibold">Welcome back, {user?.name || "Anjali"}!</span>
+            <span className="text-black font-semibold">
+              Welcome back, {user?.name || "Anjali"}!
+            </span>
           </div>
 
           <div className="space-y-4">
@@ -153,7 +190,8 @@ const Dashboard = () => {
               Your Resume Hub
             </h1>
             <p className="text-xl text-[#9AA4C7] max-w-2xl mx-auto">
-              Build, manage, and perfect your resumes with AI-powered tools and expert guidance
+              Build, manage, and perfect your resumes with AI-powered tools and
+              expert guidance
             </p>
           </div>
 
@@ -175,17 +213,33 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
-            <StatCard icon={FilePenLineIcon} label="Resumes Created" value={allResumes.length} />
-            <StatCard icon={BookOpenIcon} label="Interview Questions" value={interviewQuestionsCount} />
-            <StatCard icon={TrendingUpIcon} label="Career Progress" value="85%" />
+            <StatCard
+              icon={FilePenLineIcon}
+              label="Resumes Created"
+              value={allResumes.length}
+            />
+            <StatCard
+              icon={BookOpenIcon}
+              label="Interview Questions"
+              value={interviewQuestionsCount}
+            />
+            <StatCard
+              icon={TrendingUpIcon}
+              label="Career Progress"
+              value="85%"
+            />
           </div>
         </div>
 
         {/* QUICK ACTIONS */}
         <div className="space-y-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-[#E6ECF2] mb-4">Quick Actions</h2>
-            <p className="text-[#9AA4C7]">Jump into your favorite tools and resources</p>
+            <h2 className="text-4xl font-bold text-[#E6ECF2] mb-4">
+              Quick Actions
+            </h2>
+            <p className="text-[#9AA4C7]">
+              Jump into your favorite tools and resources
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -223,8 +277,12 @@ const Dashboard = () => {
         {/* RESUMES GALLERY */}
         <div className="space-y-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-[#E6ECF2] mb-4">Your Resumes</h2>
-            <p className="text-[#9AA4C7]">Manage and edit your professional documents</p>
+            <h2 className="text-4xl font-bold text-[#E6ECF2] mb-4">
+              Your Resumes
+            </h2>
+            <p className="text-[#9AA4C7]">
+              Manage and edit your professional documents
+            </p>
           </div>
 
           {allResumes.length === 0 ? (
@@ -232,8 +290,12 @@ const Dashboard = () => {
               <div className="inline-flex items-center justify-center w-24 h-24 bg-[#FF7700]/30 border-2 border-[#FF7700] rounded-full mb-6">
                 <FilePenLineIcon className="size-12 text-[#FF7700]" />
               </div>
-              <h3 className="text-2xl font-semibold text-[#E6ECF2] mb-2">No resumes yet</h3>
-              <p className="text-[#9AA4C7] mb-8">Start building your first professional resume!</p>
+              <h3 className="text-2xl font-semibold text-[#E6ECF2] mb-2">
+                No resumes yet
+              </h3>
+              <p className="text-[#9AA4C7] mb-8">
+                Start building your first professional resume!
+              </p>
               <button
                 onClick={() => setShowCreateResume(true)}
                 className="px-6 py-3 bg-[#FF7700] text-black font-semibold rounded-lg hover:opacity-90 transition-all duration-300"
@@ -258,24 +320,83 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+        <div className="fixed bottom-4 right-4 w-80 bg-[#0A0F2C] border-2 border-[#1B2256] rounded-xl p-4 flex flex-col space-y-2 shadow-xl z-50">
+          <div className="flex-1 overflow-y-auto max-h-64 space-y-2">
+            {chatMessages.map((msg, i) => (
+              <div
+                key={i}
+                className={`p-2 rounded-md ${
+                  msg.role === "user"
+                    ? "bg-[#FF7700]/30 text-black self-end"
+                    : "bg-[#1B2256] text-[#E6ECF2] self-start"
+                }`}
+              >
+                {msg.content}
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2 mt-2">
+            <input
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendChatMessage()}
+              placeholder="Ask AI..."
+              className="flex-1 px-2 py-1 rounded-md bg-[#0E143A] border border-[#1B2256] text-[#E6ECF2] focus:outline-none"
+            />
+            <button
+              onClick={sendChatMessage}
+              className="px-3 py-1 bg-[#FF7700] text-black rounded-md"
+              disabled={chatLoading}
+            >
+              {chatLoading ? "..." : "Send"}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* MODALS */}
       {showCreateResume && (
-        <Modal title="Create New Resume" onClose={() => setShowCreateResume(false)} onSubmit={createResume} button="Create Resume">
-          <Input value={title} onChange={setTitle} placeholder="Enter resume title" />
+        <Modal
+          title="Create New Resume"
+          onClose={() => setShowCreateResume(false)}
+          onSubmit={createResume}
+          button="Create Resume"
+        >
+          <Input
+            value={title}
+            onChange={setTitle}
+            placeholder="Enter resume title"
+          />
         </Modal>
       )}
 
       {showUploadResume && (
-        <Modal title="Upload Resume" onClose={() => setShowUploadResume(false)} onSubmit={uploadResume} button={isLoading ? "Uploading..." : "Upload Resume"}>
-          <Input value={title} onChange={setTitle} placeholder="Enter resume title" />
+        <Modal
+          title="Upload Resume"
+          onClose={() => setShowUploadResume(false)}
+          onSubmit={uploadResume}
+          button={isLoading ? "Uploading..." : "Upload Resume"}
+        >
+          <Input
+            value={title}
+            onChange={setTitle}
+            placeholder="Enter resume title"
+          />
         </Modal>
       )}
 
       {editResumeId && (
-        <Modal title="Edit Resume Title" onClose={() => setEditResumeId("")} onSubmit={editTitle} button="Update Title">
-          <Input value={title} onChange={setTitle} placeholder="Enter new title" />
+        <Modal
+          title="Edit Resume Title"
+          onClose={() => setEditResumeId("")}
+          onSubmit={editTitle}
+          button="Update Title"
+        >
+          <Input
+            value={title}
+            onChange={setTitle}
+            placeholder="Enter new title"
+          />
         </Modal>
       )}
     </div>
@@ -304,13 +425,19 @@ const ActionCard = ({ icon: Icon, label, description, onClick, gradient }) => (
     onClick={onClick}
     className="group relative rounded-2xl p-8 text-center bg-[#0A0F2C] border-2 border-[#1B2256] hover:border-white/30 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 backdrop-blur-sm overflow-hidden"
   >
-    <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+    <div
+      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
+    ></div>
     <div className="relative z-10">
       <div className="p-4 w-fit rounded-2xl bg-[#0E143A] border border-[#1B2256] mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
         <Icon className="size-8 text-[#E6ECF2] group-hover:text-white transition-colors duration-300" />
       </div>
-      <h3 className="text-lg font-bold text-[#E6ECF2] mb-2 group-hover:text-white transition-colors duration-300">{label}</h3>
-      <p className="text-sm text-[#9AA4C7] group-hover:text-white/80 transition-colors duration-300">{description}</p>
+      <h3 className="text-lg font-bold text-[#E6ECF2] mb-2 group-hover:text-white transition-colors duration-300">
+        {label}
+      </h3>
+      <p className="text-sm text-[#9AA4C7] group-hover:text-white/80 transition-colors duration-300">
+        {description}
+      </p>
     </div>
     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7700] to-[#8DB2D4] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
   </button>
@@ -331,7 +458,9 @@ const ResumeCard = ({ resume, onEdit, onDelete, onClick }) => (
 
     {/* Title and Date */}
     <div className="relative z-10">
-      <p className="font-bold text-xl text-[#E6ECF2] mb-3 group-hover:text-white transition-colors duration-300 line-clamp-2">{resume.title}</p>
+      <p className="font-bold text-xl text-[#E6ECF2] mb-3 group-hover:text-white transition-colors duration-300 line-clamp-2">
+        {resume.title}
+      </p>
       <p className="text-sm text-[#9AA4C7] group-hover:text-white/80 transition-colors duration-300">
         {new Date(resume.updatedAt).toLocaleDateString()}
       </p>
@@ -376,7 +505,9 @@ const Modal = ({ title, children, onClose, onSubmit, button }) => (
     >
       <div className="absolute inset-0 bg-gradient-to-br from-[#FF7700]/20 via-transparent to-[#8DB2D4]/20 rounded-2xl"></div>
       <div className="relative z-10">
-        <h2 className="text-2xl font-bold mb-6 text-[#E6ECF2] text-center">{title}</h2>
+        <h2 className="text-2xl font-bold mb-6 text-[#E6ECF2] text-center">
+          {title}
+        </h2>
         {children}
         <button className="w-full mt-6 py-4 rounded-xl bg-[#FF7700] text-black font-bold hover:opacity-90 hover:scale-105 transition-all duration-300">
           {button}

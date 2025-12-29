@@ -3,6 +3,7 @@ import ModernTemplate from "./templates/ModernTemplate";
 import MinimalTemplate from "./templates/MinimalTemplate";
 import MinimalImageTemplate from "./templates/MinimalImageTemplate";
 import ClassicTemplate from "./templates/ClassicTemplate";
+import CustomTemplate from "./templates/CustomTemplate";
 
 const ResumePreview = ({
   data,
@@ -29,14 +30,17 @@ const ResumePreview = ({
   return (
     <div
       id="resume-preview"
-      className={"border border-gray-200 print:shadow-none print:border-none " + classes}
-      style={{
-        backgroundColor: bgColor,
-        color: textColor,
-        fontFamily: fontFamily,
-      }}
+      className={
+        "border border-gray-200 print:shadow-none print:border-none " + classes
+      }
     >
-      {renderTemplate()}
+      <CustomTemplate
+        bgColor={bgColor}
+        textColor={textColor}
+        fontFamily={fontFamily}
+      >
+        {renderTemplate()}
+      </CustomTemplate>
     </div>
   );
 };

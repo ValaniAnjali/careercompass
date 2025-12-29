@@ -16,6 +16,7 @@ import ViewInterviewQue from './pages/ViewInterviewQue'
 import SubmitInterviewQue from './pages/SubmitInterviewQue'
 import RoadmapFinder from './pages/RoadmapFinder'
 import ResourceSharing from './pages/ResourceSharing'
+// import ResourceUpload from './pages/ResourceUpload'
 
 
 
@@ -61,6 +62,7 @@ function App() {
           <Route path='submit-question' element={<SubmitInterviewQue />} />
           <Route path='roadmap-finder' element={<RoadmapFinder />} />
           <Route path='resources' element={<ResourceSharing />} />
+          {/* <Route path='upload-resource' element={<ResourceUpload />} /> */}
         </Route>
 
         <Route path='view/:resumeId' element={<Preview />} />
