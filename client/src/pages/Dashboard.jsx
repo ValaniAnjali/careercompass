@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 // import pdfToText from "react-pdftotext";
+import ChatbotPanel from "../components/chatbot/ChatbotPanel";
 
 const Dashboard = () => {
   const { user, token } = useSelector((state) => state.auth);
@@ -32,6 +33,7 @@ const Dashboard = () => {
   const [editResumeId, setEditResumeId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [interviewQuestionsCount, setInterviewQuestionsCount] = useState(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const loadAllResumes = async () => {
     try {
@@ -320,38 +322,61 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-        <div className="fixed bottom-4 right-4 w-80 bg-[#0A0F2C] border-2 border-[#1B2256] rounded-xl p-4 flex flex-col space-y-2 shadow-xl z-50">
-          <div className="flex-1 overflow-y-auto max-h-64 space-y-2">
-            {chatMessages.map((msg, i) => (
-              <div
-                key={i}
-                className={`p-2 rounded-md ${
-                  msg.role === "user"
-                    ? "bg-[#FF7700]/30 text-black self-end"
-                    : "bg-[#1B2256] text-[#E6ECF2] self-start"
-                }`}
-              >
-                {msg.content}
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-2 mt-2">
-            <input
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendChatMessage()}
-              placeholder="Ask AI..."
-              className="flex-1 px-2 py-1 rounded-md bg-[#0E143A] border border-[#1B2256] text-[#E6ECF2] focus:outline-none"
-            />
-            <button
-              onClick={sendChatMessage}
-              className="px-3 py-1 bg-[#FF7700] text-black rounded-md"
-              disabled={chatLoading}
+        {isChatOpen && (
+          <div className="fixed bottom-6 right-6 w-96 bg-[#0A0F2C] border-2 border-[#1B2256] rounded-2xl shadow-2xl z-50 flex flex-col">
+            {/* Header */}
+            <div className="flex justify-between items-center p-4 border-b border-[#1B2256]">
+              <h3 className="text-[#E6ECF2] font-semibold">
+                AI Career Assistant
+              </h3>
+              <XIcon
+                onClick={() => setIsChatOpen(false)}
+                className="size-5 text-[#9AA4C7] hover:text-[#FF7700] cursor-pointer"
+              />
+            </div>
+
+            {/* Messages */}
+            <div
+              id="chat-container"
+              className="flex-1 p-4 overflow-y-auto space-y-2 max-h-80"
             >
-              {chatLoading ? "..." : "Send"}
-            </button>
+              {chatMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`max-w-[80%] p-2 rounded-lg text-sm ${
+                    msg.role === "user"
+                      ? "ml-auto bg-[#FF7700]/30 text-black"
+                      : "mr-auto bg-[#1B2256] text-[#E6ECF2]"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              ))}
+
+              {chatLoading && (
+                <p className="text-xs text-[#9AA4C7]">AI is typing...</p>
+              )}
+            </div>
+
+            {/* Input */}
+            <div className="flex gap-2 p-3 border-t border-[#1B2256]">
+              <input
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendChatMessage()}
+                placeholder="Ask anything..."
+                className="flex-1 px-3 py-2 rounded-lg bg-[#0E143A] border border-[#1B2256] text-[#E6ECF2] focus:outline-none"
+              />
+              <button
+                onClick={sendChatMessage}
+                disabled={chatLoading}
+                className="px-4 py-2 bg-[#FF7700] text-black rounded-lg font-semibold"
+              >
+                Send
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* MODALS */}
@@ -399,6 +424,14 @@ const Dashboard = () => {
           />
         </Modal>
       )}
+      {/* CHATBOT FLOATING BUTTON */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 z-50 bg-[#FF7700] p-4 rounded-full shadow-xl hover:scale-110 transition"
+      >
+        <SparklesIcon className="text-black size-6" />
+      </button>
+        {/* <ChatbotPanel />  */}
     </div>
   );
 };
