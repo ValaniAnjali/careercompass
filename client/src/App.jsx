@@ -26,6 +26,7 @@ function App() {
 
   const getUserData = async () => {
     const token = localStorage.getItem('token')
+    // in new also modified localstorage for token purpose
     try {
       if (token) {
         const { data } = await api.get('/api/users/data', { headers: { Authorization: token } })
