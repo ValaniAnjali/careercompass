@@ -8,7 +8,7 @@ import resourceRoutes from "./routes/resourceRoutes.js";
 import aiRouter from "./routes/aiRoutes.js";
 import interviewQuestionRoutes from "./routes/interviewQuestionRoutes.js";
 import cloudinary from "./configs/cloudinary.js";
-
+import chatbotRoutes from "./routes/chatbot.js";
 const app=express();
 const PORT=process.env.PORT||3000;
 
@@ -18,6 +18,7 @@ await connectDB()
 
 app.use(express.json())
 app.use(cors())
+app.use("/api/chatbot", chatbotRoutes);
 app.get('/',(req,res)=>res.send("Server is live.."))
 app.use('/api/users',userRouter)
 app.use('/api/resumes',resumeRouter)
