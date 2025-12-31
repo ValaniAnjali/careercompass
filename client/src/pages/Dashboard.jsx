@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 // import pdfToText from "react-pdftotext";
-import ChatbotPanel from "../components/chatbot/ChatbotPanel";
+// import ChatbotPanel from "../components/chatbot/ChatbotPanel";
 
 const Dashboard = () => {
   const { user, token } = useSelector((state) => state.auth);
