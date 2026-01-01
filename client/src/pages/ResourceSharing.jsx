@@ -27,18 +27,17 @@ const ResourceSharing = () => {
   }
 };
 
-const viewPDF = async (publicId) => {
+const viewPDF = async (id) => {
   try {
-    const res = await api.get(`/api/resource/${publicId}`); // call your backend
-    const pdfRes = await fetch(res.data.url);              // fetch signed Cloudinary URL
-    const pdfBlob = await pdfRes.blob();
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl); // opens PDF in a new tab
+    const res = await api.get(`/api/resources/${id}`); // call backend with correct _id
+    window.open(res.data.fileUrl, "_blank"); // open PDF directly
   } catch (err) {
-    console.error("Failed to load PDF", err);
-    alert("Failed to open PDF.");
+    console.error("Failed to open PDF", err);
+    alert("Failed to open PDF");
   }
 };
+
+
 
 
 
@@ -99,11 +98,11 @@ const viewPDF = async (publicId) => {
             </p>
 
             <button
-              onClick={() => viewPDF(item.publicId)} // make sure item.publicId exists
-              className="text-purple-600 font-medium mt-3 inline-block"
-            >
-              View / Download →
-            </button>
+  onClick={() => viewPDF(item._id)} // use _id here
+  className="text-purple-600 font-medium mt-3 inline-block"
+>
+  View / Download →
+</button>
 
           </div>
         ))}

@@ -8,6 +8,7 @@ import resumeRouter from "./routes/resumeRoutes.js";
 import resourceRoutes from "./routes/resourceRoutes.js";
 import interviewQuestionRoutes from "./routes/interviewQuestionRoutes.js";
 import chatbotRoutes from "./routes/chatbot.js";
+// import { getResourceById } from "./controllers/resourceController.js";
 
 dotenv.config();
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/resumes", resumeRouter);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/interview-questions", interviewQuestionRoutes);
 app.use("/api/chatbot", chatbotRoutes);
+
 
 // 🏠 Root
 app.get("/", (req, res) => {

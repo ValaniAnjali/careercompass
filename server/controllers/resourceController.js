@@ -64,3 +64,17 @@ export const getResources = async (req, res) => {
   const resources = await Resource.find(filter).sort({ createdAt: -1 });
   res.json(resources);
 };
+
+// resourceController.js
+export const getResourceById = async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+    if (!resource) return res.status(404).json({ message: "Resource not found" });
+
+    res.status(200).json(resource);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
