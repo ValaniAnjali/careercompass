@@ -41,10 +41,8 @@ const Profile = () => {
                 skills: formData.skills.split(',').map(s => s.trim())
             };
             const { data } = await api.put('/api/users/update', payload, {
-    headers: {
-        Authorization: localStorage.getItem('token')
-    }
-});
+                headers: { Authorization: localStorage.getItem('token') }
+            });
 
             toast.success('Profile updated successfully');
             dispatch(login({ user: data.user, token: localStorage.getItem('token') }));
@@ -54,57 +52,60 @@ const Profile = () => {
     };
 
     return (
-        <div className="flex justify-center mt-10">
-            <form onSubmit={handleSubmit} className="w-full max-w-md bg-white border border-gray-300 rounded-2xl p-8 shadow-md">
-                <h2 className="text-2xl font-bold mb-6">Your Profile</h2>
+        <div className="flex justify-center  px-4">
+            <form 
+                onSubmit={handleSubmit} 
+                className="w-full max-w-md bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 shadow-xl text-white"
+            >
+                <h2 className="text-3xl font-bold mb-6 text-center text-indigo-400">Your Profile</h2>
 
-                <label className="block text-gray-700 mt-3">Name</label>
+                <label className="block text-gray-300 mt-3 font-medium">Name</label>
                 <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-full px-4 py-2 mt-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full border border-gray-700 rounded-full px-4 py-2 mt-1 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
 
-                <label className="block text-gray-700 mt-3">Email (cannot edit)</label>
+                <label className="block text-gray-300 mt-3 font-medium">Email (cannot edit)</label>
                 <input
                     type="email"
                     value={userRedux?.email}
                     disabled
-                    className="w-full border border-gray-300 rounded-full px-4 py-2 mt-1 bg-gray-100 cursor-not-allowed"
+                    className="w-full border border-gray-700 rounded-full px-4 py-2 mt-1 bg-gray-700 text-gray-400 cursor-not-allowed"
                 />
 
-                <label className="block text-gray-700 mt-3">Desired Job Role</label>
+                <label className="block text-gray-300 mt-3 font-medium">Desired Job Role</label>
                 <input
                     type="text"
                     name="jobRole"
                     value={formData.jobRole}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-full px-4 py-2 mt-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full border border-gray-700 rounded-full px-4 py-2 mt-1 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
 
-                <label className="block text-gray-700 mt-3">Higher Education</label>
+                <label className="block text-gray-300 mt-3 font-medium">Higher Education</label>
                 <input
                     type="text"
                     name="higherEducation"
                     value={formData.higherEducation}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-full px-4 py-2 mt-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full border border-gray-700 rounded-full px-4 py-2 mt-1 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
 
-                <label className="block text-gray-700 mt-3">Skills (comma separated)</label>
+                <label className="block text-gray-300 mt-3 font-medium">Skills (comma separated)</label>
                 <input
                     type="text"
                     name="skills"
                     value={formData.skills}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-full px-4 py-2 mt-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full border border-gray-700 rounded-full px-4 py-2 mt-1 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
 
                 <button
                     type="submit"
-                    className="mt-6 w-full bg-indigo-500 text-white py-2 rounded-full hover:opacity-90 transition-opacity"
+                    className="mt-6 w-full bg-indigo-500 text-white py-2 rounded-full hover:bg-indigo-600 transition-colors font-semibold"
                 >
                     Save Changes
                 </button>
