@@ -13,14 +13,14 @@ import chatbotRoutes from "./routes/chatbot.js";
 dotenv.config();
 const app = express();
 
-// 🔌 Connect Database
+
 connectDB();
 
-// 🔧 Middlewares
+
 app.use(cors());
 app.use(express.json());
 
-// 🚀 Routes
+
 app.use("/api/users", userRouter);
 app.use("/api/resumes", resumeRouter);
 app.use("/api/resources", resourceRoutes);
@@ -28,12 +28,11 @@ app.use("/api/interview-questions", interviewQuestionRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 
 
-// 🏠 Root
+
 app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
 
-// 🚀 Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
