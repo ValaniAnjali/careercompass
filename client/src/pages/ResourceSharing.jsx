@@ -36,11 +36,6 @@ const viewPDF = async (id) => {
     alert("Failed to open PDF");
   }
 };
-
-
-
-
-
   const filteredResources = resources.filter((item) =>
     item.title.toLowerCase().includes(search.toLowerCase()) &&
     (category === "All" || item.category === category)
