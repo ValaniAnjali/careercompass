@@ -251,7 +251,7 @@ const Dashboard = () => {
             <ActionCard
               icon={FilePenLineIcon}
               label="Interview Questions"
-              description="Practice with AI-generated questions"
+              description="Practice with questions submitted by the community"
               onClick={() => navigate("/app/interview-questions")}
               gradient="from-[#FF7700] to-[#FF5500]"
             />
