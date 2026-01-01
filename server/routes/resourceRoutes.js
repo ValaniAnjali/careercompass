@@ -1,17 +1,17 @@
 import express from "express";
-import upload from "../middlewares/upload.js";
-import protect from "../middlewares/authMiddleware.js";
-import {
-  uploadResource,
-  getAllResources
-} from "../controllers/resourceController.js";
+import protect from "../middlewares/authMiddleWare.js";
+import upload from "../configs/multer.js";
+import { uploadResource, getAllResources, getResources } from "../controllers/resourceController.js";
 
 const router = express.Router();
 
-// Upload resource (protected)
-router.post("/", protect, upload.single("file"), uploadResource);
+// Upload a resource (multipart/form-data: file)
+router.post("/upload", protect, upload.single("file"), uploadResource);
 
-// Get all resources (protected)
-router.get("/", protect, getAllResources);
+// Get all resources
+router.get("/", getAllResources);
+
+// Search/filter resources
+router.get("/search", getResources);
 
 export default router;

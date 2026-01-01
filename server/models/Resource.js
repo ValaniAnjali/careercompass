@@ -3,15 +3,13 @@ import mongoose from "mongoose";
 const resourceSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    category: { type: String },
+    category: { type: String, required: true },
     fileUrl: { type: String, required: true },
-    uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    uploaderName: String
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    uploaderName: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true }   // ✅ THIS adds createdAt & updatedAt automatically
 );
 
-export default mongoose.model("Resource", resourceSchema);
+const Resource = mongoose.model("Resource", resourceSchema);
+export default Resource;

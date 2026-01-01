@@ -2,19 +2,20 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    let mongodbURI = process.env.MONGODB_URI;
+    const mongoURI = process.env.MONGODB_URI;
 
-    if (!mongodbURI) {
-      throw new Error("MongoDB URI not set in environment");
+    if (!mongoURI) {
+      throw new Error("❌ MongoDB URI is not defined in environment variables");
     }
 
-    await mongoose.connect(mongodbURI, {
+    await mongoose.connect(mongoURI, {
       dbName: "CareerCompassResumes",
     });
 
-    console.log("✅ Database connected successfully");
+    console.log("✅ MongoDB connected successfully");
   } catch (error) {
-    console.log("❌ Error connecting to MongoDB", error);
+    console.error("❌ MongoDB connection failed:", error.message);
+    process.exit(1); // Stop server if DB fails
   }
 };
 

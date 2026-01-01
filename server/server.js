@@ -1,43 +1,39 @@
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
+import dotenv from "dotenv";
+
 import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRoutes.js";
 import resumeRouter from "./routes/resumeRoutes.js";
 import resourceRoutes from "./routes/resourceRoutes.js";
-import aiRouter from "./routes/aiRoutes.js";
 import interviewQuestionRoutes from "./routes/interviewQuestionRoutes.js";
-import cloudinary from "./configs/cloudinary.js";
 import chatbotRoutes from "./routes/chatbot.js";
-const app=express();
-const PORT=process.env.PORT||3000;
 
-//Database Connection
+dotenv.config();
+const app = express();
 
-await connectDB()
+// 🔌 Connect Database
+connectDB();
 
-app.use(express.json())
-app.use(cors())
-app.use("/api/chatbot", chatbotRoutes);
-app.get('/',(req,res)=>res.send("Server is live.."))
-app.use('/api/users',userRouter)
-app.use('/api/resumes',resumeRouter)
-app.use('/api/ai',aiRouter)
-app.use('/api/interview-questions', interviewQuestionRoutes);
+// 🔧 Middlewares
+app.use(cors());
+app.use(express.json());
+
+// 🚀 Routes
+app.use("/api/users", userRouter);
+app.use("/api/resumes", resumeRouter);
 app.use("/api/resources", resourceRoutes);
-app.get("/api/resource/:publicId", async (req, res) => {
-  const { publicId } = req.params;
-  try {
-    const url = cloudinary.v2.utils.private_download_url(publicId, {
-      resource_type: "raw",
-      type: "authenticated",
-      format: "pdf",
-    });
-    res.json({ url });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+app.use("/api/interview-questions", interviewQuestionRoutes);
+app.use("/api/chatbot", chatbotRoutes);
+
+// 🏠 Root
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
 });
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-})
+
+// 🚀 Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+    
