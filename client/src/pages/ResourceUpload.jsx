@@ -38,10 +38,10 @@ export default function ResourceUpload() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow">
+    <div className="max-w-xl mx-auto  bg-white p-6 shadow">
       <h2 className="text-xl font-bold mb-4">Upload Resource</h2>
 
-      <form onSubmit={submitHandler} className="space-y-4">
+      <form onSubmit={submitHandler} className="space-y-4 mt-25">
         <input
           className="border p-2 w-full"
           placeholder="Title"
