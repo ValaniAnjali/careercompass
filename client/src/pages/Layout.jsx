@@ -13,9 +13,11 @@ const Layout = () => {
     <div>
       {
         user?(
-          <div className='min-h-screen bg-gray-50'>
-        <Navbar/>
-        <Outlet/>
+          <div className='min-h-screen bg-[#0A0F2C] flex flex-col'>
+            <Navbar />
+              <div className="flex-1 overflow-y-auto p-6 pt-24">
+              <Outlet />
+              </div>
     </div>
         ):(
           <Login/>

@@ -18,12 +18,15 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import api from "../configs/api";
 import toast from "react-hot-toast";
+// import InterviewQuestion from './InterviewQuestion'
+
 // import pdfToText from "react-pdftotext";
 // import ChatbotPanel from "../components/chatbot/ChatbotPanel";
 
 const Dashboard = () => {
   const { user, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const [showInterviewQuestion, setShowInterviewQuestion] = useState(false)
 
   const [allResumes, setAllResumes] = useState([]);
   const [showCreateResume, setShowCreateResume] = useState(false);
@@ -214,7 +217,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto mt-12">
             <StatCard
               icon={FilePenLineIcon}
               label="Resumes Created"
@@ -225,11 +228,11 @@ const Dashboard = () => {
               label="Interview Questions"
               value={interviewQuestionsCount}
             />
-            <StatCard
+            {/* <StatCard
               icon={TrendingUpIcon}
               label="Career Progress"
               value="85%"
-            />
+            /> */}
           </div>
         </div>
 
@@ -244,7 +247,7 @@ const Dashboard = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
             <ActionCard
               icon={FilePenLineIcon}
               label="Interview Questions"
@@ -252,20 +255,20 @@ const Dashboard = () => {
               onClick={() => navigate("/app/interview-questions")}
               gradient="from-[#FF7700] to-[#FF5500]"
             />
-            <ActionCard
+            {/* <ActionCard
               icon={UploadCloud}
               label="Submit Question"
               description="Contribute to our question bank"
               onClick={() => navigate("/app/submit-question")}
               gradient="from-[#FF7700] to-[#FF5500]"
-            />
-            <ActionCard
+            /> */}
+            {/* <ActionCard
               icon={AwardIcon}
               label="Career Roadmap"
               description="Find your perfect career path"
               onClick={() => navigate("/app/roadmap-finder")}
               gradient="from-[#FF7700] to-[#FF5500]"
-            />
+            /> */}
             <ActionCard
               icon={UsersIcon}
               label="Resources"
