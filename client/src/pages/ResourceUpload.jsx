@@ -6,12 +6,11 @@ export default function ResourceUpload() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false); // New state
+  const [loading, setLoading] = useState(false);
   const fileRef = useRef();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     if (!title || !category || !file) {
       toast.error("All fields required");
       return;
@@ -23,13 +22,10 @@ export default function ResourceUpload() {
     formData.append("file", file);
 
     try {
-      setLoading(true); // Start loading
+      setLoading(true);
       await api.post("/api/resources/upload", formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-
       toast.success("Uploaded successfully");
       setTitle("");
       setCategory("");
@@ -39,58 +35,62 @@ export default function ResourceUpload() {
       console.error(error);
       toast.error("Upload failed");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700">
-      <h2 className="text-2xl font-bold mb-6 text-white text-center">Upload Resource</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0F2C] px-6 py-12">
+      <div className="w-full max-w-lg p-8 bg-[#0E143A]/50 backdrop-blur-md rounded-2xl border border-[#1B2256]/50 shadow-lg">
+        <h2 className="text-3xl font-bold mb-6 text-white text-center">
+          Upload Resource
+        </h2>
 
-      <form onSubmit={submitHandler} className="space-y-5">
-        <input
-          className="w-full p-3 rounded-xl bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={loading} // Disable input while uploading
-        />
-
-        <select
-          className="w-full p-3 rounded-xl bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          disabled={loading} // Disable select while uploading
-        >
-          <option value="" className="text-gray-400">Select Category</option>
-          <option>Lecture Notes</option>
-          <option>Placement Prep</option>
-          <option>Guidance</option>
-          <option>Notes</option>
-        </select>
-
-        <label className="w-full flex flex-col items-center px-4 py-6 bg-gray-800 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-purple-500 transition-colors text-gray-400">
-          <span>{file ? file.name : "Choose a PDF file"}</span>
+        <form onSubmit={submitHandler} className="space-y-5">
           <input
-            ref={fileRef}
-            type="file"
-            accept=".pdf"
-            className="hidden"
-            onChange={(e) => setFile(e.target.files[0])}
-            disabled={loading} // Disable file input while uploading
+            className="w-full p-3 rounded-xl bg-[#0A0F2C]/70 border border-[#1B2256] text-white placeholder-[#9AA4C7] focus:outline-none focus:ring-2 focus:ring-[#FF7700]/50 transition"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={loading}
           />
-        </label>
 
-        <button
-          type="submit"
-          className={`w-full py-3 bg-purple-600 text-white font-semibold rounded-xl transition-colors shadow-md ${
-            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-purple-700"
-          }`}
-          disabled={loading} // Disable button while uploading
-        >
-          {loading ? "Uploading..." : "Upload"}
-        </button>
-      </form>
+          <select
+            className="w-full p-3 rounded-xl bg-[#0A0F2C]/70 border border-[#1B2256] text-white focus:outline-none focus:ring-2 focus:ring-[#FF7700]/50 transition"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            disabled={loading}
+          >
+            <option value="" className="text-[#9AA4C7]">Select Category</option>
+            <option>Lecture Notes</option>
+            <option>Placement Prep</option>
+            <option>Guidance</option>
+            <option>Notes</option>
+          </select>
+
+          <label className="w-full flex flex-col items-center px-4 py-6 bg-[#0E143A]/50 border-2 border-dashed border-[#1B2256] rounded-xl cursor-pointer hover:border-[#FF7700] transition-colors text-[#9AA4C7]">
+            <span>{file ? file.name : "Choose a PDF file"}</span>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              onChange={(e) => setFile(e.target.files[0])}
+              disabled={loading}
+            />
+          </label>
+
+          <button
+            type="submit"
+            className={`w-full py-3 bg-gradient-to-r from-[#FF7700] to-[#FFA600] text-black font-semibold rounded-xl shadow-md transition-all duration-300 ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg hover:shadow-[#FF7700]/30"
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

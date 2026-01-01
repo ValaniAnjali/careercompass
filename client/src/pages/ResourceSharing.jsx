@@ -13,61 +13,66 @@ const ResourceSharing = () => {
     fetchResources();
   }, []);
 
- const fetchResources = async () => {
-  try {
-    const token = localStorage.getItem("token"); // or wherever you store it
-    const res = await api.get("/api/resources", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setResources(res.data);
-  } catch (err) {
-    console.error("Failed to load resources", err);
-  }
-};
+  const fetchResources = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await api.get("/api/resources", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setResources(res.data);
+    } catch (err) {
+      console.error("Failed to load resources", err);
+    }
+  };
 
-const viewPDF = async (id) => {
-  try {
-    const res = await api.get(`/api/resources/${id}`); // call backend with correct _id
-    window.open(res.data.fileUrl, "_blank"); // open PDF directly
-  } catch (err) {
-    console.error("Failed to open PDF", err);
-    alert("Failed to open PDF");
-  }
-};
-  const filteredResources = resources.filter((item) =>
-    item.title.toLowerCase().includes(search.toLowerCase()) &&
-    (category === "All" || item.category === category)
+  const viewPDF = async (id) => {
+    try {
+      const res = await api.get(`/api/resources/${id}`);
+      window.open(res.data.fileUrl, "_blank");
+    } catch (err) {
+      console.error("Failed to open PDF", err);
+      alert("Failed to open PDF");
+    }
+  };
+
+  const filteredResources = resources.filter(
+    (item) =>
+      item.title.toLowerCase().includes(search.toLowerCase()) &&
+      (category === "All" || item.category === category)
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6 mt-16">
-        <h1 className="text-3xl font-semibold">📚 Resource Sharing</h1>
+    <div className="min-h-screen bg-[#0A0F2C] px-6 py-12 relative">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <h1 className="text-4xl font-bold text-white flex items-center gap-3 mb-4 md:mb-0">
+          Resource Sharing
+        </h1>
 
         <button
           onClick={() => navigate("/app/upload-resource")}
-          className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded"
+          className="flex items-center gap-2 bg-gradient-to-r from-[#FF7700] to-[#FFA600] text-black px-5 py-2 rounded-xl hover:shadow-lg transition-shadow"
         >
-          <UploadCloud size={18} />
+          <UploadCloud size={20} />
           Upload Resource
         </button>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-4xl">
         <input
-          className="border px-3 py-2 rounded w-full"
+          type="text"
           placeholder="Search resources..."
+          value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 px-4 py-3 rounded-xl bg-[#0E143A] text-white placeholder-[#9AA4C7] focus:outline-none focus:ring-2 focus:ring-[#FF7700]/50"
         />
-
         <select
-          className="border px-3 py-2 rounded"
+          value={category}
           onChange={(e) => setCategory(e.target.value)}
+          className="px-4 py-3 rounded-xl bg-[#0E143A] text-white border border-[#1B2256] focus:outline-none focus:ring-2 focus:ring-[#FF7700]/50"
         >
-          <option value="All">All</option>
+          <option value="All">All Categories</option>
           <option value="Lecture Notes">Lecture Notes</option>
           <option value="Placement Prep">Placement Prep</option>
           <option value="Guidance">Guidance</option>
@@ -75,33 +80,42 @@ const viewPDF = async (id) => {
         </select>
       </div>
 
-      {/* Cards */}
-      <div className="grid md:grid-cols-3 gap-6">
-        {filteredResources.map((item) => (
-          <div
-            key={item._id}
-            className="border rounded-lg p-5 hover:shadow-md"
-          >
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-              {item.category}
-            </span>
+      {/* Resource Cards */}
+      {filteredResources.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-[#9AA4C7]">No resources found. Try adjusting your search or category.</p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-6">
+          {filteredResources.map((item) => (
+            <div
+              key={item._id}
+              className="bg-[#0E143A]/50 backdrop-blur-sm p-5 rounded-2xl border border-[#1B2256]/50 hover:shadow-lg hover:shadow-[#FF7700]/20 transition-all duration-300 flex flex-col justify-between"
+            >
+              {/* Category */}
+              <span className="text-xs px-3 py-1 rounded-full bg-[#FF7700]/20 text-[#FF7700] border border-[#FF7700]/30 w-max">
+                {item.category}
+              </span>
 
-            <h3 className="text-lg font-semibold mt-2">{item.title}</h3>
+              {/* Title */}
+              <h3 className="text-xl font-semibold text-white mt-3">{item.title}</h3>
 
-            <p className="text-sm text-gray-500">
-              Uploaded by {item.uploadedBy?.name || "Unknown"}
-            </p>
+              {/* Uploaded By */}
+              <p className="text-[#9AA4C7] mt-2 text-sm">
+                Uploaded by {item.uploadedBy?.name || "Unknown"}
+              </p>
 
-            <button
-  onClick={() => viewPDF(item._id)} // use _id here
-  className="text-purple-600 font-medium mt-3 inline-block"
->
-  View / Download →
-</button>
-
-          </div>
-        ))}
-      </div>
+              {/* View Button */}
+              <button
+                onClick={() => viewPDF(item._id)}
+                className="mt-4 px-4 py-2 bg-gradient-to-r from-[#FF7700] to-[#FFA600] text-black rounded-xl font-medium hover:shadow-lg hover:shadow-[#FF7700]/25 transition-all duration-300"
+              >
+                View / Download →
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
