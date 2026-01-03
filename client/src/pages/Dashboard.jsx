@@ -326,54 +326,59 @@ const Dashboard = () => {
           )}
         </div>
         {isChatOpen && (
-          <div className="fixed bottom-6 right-6 w-96 bg-[#0A0F2C] border-2 border-[#1B2256] rounded-2xl shadow-2xl z-50 flex flex-col">
+          <div className="fixed bottom-6 right-6 w-96 bg-[#0A0F2C]/95 border-2 border-[#8DB2D4] rounded-2xl shadow-2xl z-50 flex flex-col animate-fade-in backdrop-blur-md">
             {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b border-[#1B2256]">
-              <h3 className="text-[#E6ECF2] font-semibold">
-                AI Career Assistant
+            <div className="flex justify-between items-center p-4 border-b border-[#8DB2D4] bg-[#0E143A] rounded-t-2xl">
+              <h3 className="text-[#8DB2D4] font-bold tracking-wide text-lg flex items-center gap-2">
+                <SparklesIcon className="size-5 text-[#FF7700]" /> AI Chatbot
               </h3>
-              <XIcon
+              <button
                 onClick={() => setIsChatOpen(false)}
-                className="size-5 text-[#9AA4C7] hover:text-[#FF7700] cursor-pointer"
-              />
+                className="rounded-full p-1 hover:bg-[#8DB2D4]/20 transition"
+                aria-label="Close Chatbot"
+              >
+                <XIcon className="size-6 text-[#8DB2D4] hover:text-[#FF7700] transition" />
+              </button>
             </div>
 
             {/* Messages */}
             <div
               id="chat-container"
-              className="flex-1 p-4 overflow-y-auto space-y-2 max-h-80"
+              className="flex-1 p-4 overflow-y-auto space-y-2 max-h-80 bg-transparent rounded-b-2xl"
             >
+              {chatMessages.length === 0 && !chatLoading && (
+                <div className="text-center text-[#8DB2D4] text-sm mt-10">How can I help you today?</div>
+              )}
               {chatMessages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`max-w-[80%] p-2 rounded-lg text-sm ${
+                  className={`max-w-[80%] px-4 py-2 rounded-xl text-base shadow ${
                     msg.role === "user"
-                      ? "ml-auto bg-[#FF7700]/30 text-black"
-                      : "mr-auto bg-[#1B2256] text-[#E6ECF2]"
+                      ? "ml-auto bg-[#FF7700] text-black border border-[#FF7700]"
+                      : "mr-auto bg-[#0E143A] text-[#8DB2D4] border border-[#8DB2D4]"
                   }`}
                 >
                   {msg.content}
                 </div>
               ))}
-
               {chatLoading && (
-                <p className="text-xs text-[#9AA4C7]">AI is typing...</p>
+                <p className="text-xs text-[#8DB2D4] mt-2">AI is typing...</p>
               )}
             </div>
 
             {/* Input */}
-            <div className="flex gap-2 p-3 border-t border-[#1B2256]">
+            <div className="flex gap-2 p-3 border-t border-[#8DB2D4] bg-[#0E143A] rounded-b-2xl">
               <input
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendChatMessage()}
                 placeholder="Ask anything..."
-                className="flex-1 px-3 py-2 rounded-lg bg-[#0E143A] border border-[#1B2256] text-[#E6ECF2] focus:outline-none"
+                className="flex-1 px-4 py-3 rounded-xl bg-[#0A0F2C] border border-[#8DB2D4] text-[#8DB2D4] placeholder-[#8DB2D4]/60 focus:outline-none focus:ring-2 focus:ring-[#FF7700]/40 focus:border-[#FF7700] transition-all"
               />
               <button
                 onClick={sendChatMessage}
                 disabled={chatLoading}
-                className="px-4 py-2 bg-[#FF7700] text-black rounded-lg font-semibold"
+                className="px-5 py-3 bg-[#FF7700] text-black rounded-xl font-bold shadow hover:scale-105 transition-all duration-200 disabled:opacity-60"
               >
                 Send
               </button>
@@ -428,12 +433,16 @@ const Dashboard = () => {
         </Modal>
       )}
       {/* CHATBOT FLOATING BUTTON */}
-      <button
-        onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 z-50 bg-[#FF7700] p-4 rounded-full shadow-xl hover:scale-110 transition"
-      >
-        <SparklesIcon className="text-black size-6" />
-      </button>
+      {!isChatOpen && (
+        <button
+          onClick={() => setIsChatOpen(true)}
+          className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-[#FF7700] via-[#FFB347] to-[#FF5500] p-5 rounded-full shadow-2xl border-4 border-white/30 hover:scale-110 transition-all duration-300 animate-chatbot-pulse group"
+          aria-label="Open AI Chatbot"
+          style={{ boxShadow: '0 8px 32px 0 rgba(255,119,0,0.25)' }}
+        >
+          <SparklesIcon className="text-black size-7 group-hover:rotate-12 transition-transform duration-300" />
+        </button>
+      )}
         {/* <ChatbotPanel />  */}
     </div>
   );
