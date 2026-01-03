@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import api from '../configs/api'
 import toast from 'react-hot-toast'
@@ -34,10 +34,10 @@ const InterviewQuestion = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch questions
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (customSearch) => {
     try {
       setLoading(true)
-      const params = { company, role, difficulty, tag, search }
+      const params = { company, role, difficulty, tag, search: customSearch !== undefined ? customSearch : search }
       const { data } = await api.get('/api/interview-questions', {
         params,
         headers: { Authorization: token }
@@ -47,6 +47,28 @@ const InterviewQuestion = () => {
       console.error(err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Autocomplete state
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const searchRef = useRef()
+
+  // Fetch suggestions for autocomplete
+  const fetchSuggestions = async (val) => {
+    if (!val) { setSuggestions([]); setShowSuggestions(false); return }
+    try {
+      const params = { search: val }
+      const { data } = await api.get('/api/interview-questions', {
+        params,
+        headers: { Authorization: token }
+      })
+      setSuggestions(data.data.map(q => q.title).slice(0, 7))
+      setShowSuggestions(true)
+    } catch (err) {
+      setSuggestions([])
+      setShowSuggestions(false)
     }
   }
 
@@ -136,22 +158,102 @@ const InterviewQuestion = () => {
           </button>
         </div>
 
-        {/* Search bar */}
-        <div className="max-w-4xl mx-auto mb-6 relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#9AA4C7] w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search for interview questions..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 bg-[#0A0F2C]/50 backdrop-blur-sm border border-[#1B2256]/50 rounded-xl text-white placeholder-[#9AA4C7] focus:border-[#8DB2D4]/50 focus:outline-none focus:ring-2 focus:ring-[#8DB2D4]/20 text-lg"
-          />
-          <button
-            onClick={fetchQuestions}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-[#FF7700] to-[#FFA600] text-black px-6 py-2 rounded-lg font-medium hover:shadow-lg hover:shadow-[#FF7700]/25 transition-all duration-300"
-          >
-            Search
-          </button>
+        {/* Search + Filter bar */}
+        <div className="max-w-4xl mx-auto mb-6 relative flex flex-col gap-2">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#9AA4C7] w-5 h-5" />
+              <input
+                ref={searchRef}
+                type="text"
+                placeholder="Search for interview questions..."
+                value={search}
+                onChange={e => {
+                  setSearch(e.target.value)
+                  fetchSuggestions(e.target.value)
+                }}
+                onFocus={() => search && setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
+                className="w-full pl-12 pr-4 py-4 bg-[#0A0F2C]/50 backdrop-blur-sm border border-[#1B2256]/50 rounded-xl text-white placeholder-[#9AA4C7] focus:border-[#8DB2D4]/50 focus:outline-none focus:ring-2 focus:ring-[#8DB2D4]/20 text-lg"
+                autoComplete="off"
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <ul className="absolute left-0 right-0 mt-1 bg-[#0A0F2C] border border-[#1B2256]/50 rounded-xl shadow-lg z-20 max-h-56 overflow-y-auto">
+                  {suggestions.map((s, i) => (
+                    <li
+                      key={i}
+                      onMouseDown={() => {
+                        setSearch(s)
+                        setShowSuggestions(false)
+                        fetchQuestions(s)
+                        searchRef.current.blur()
+                      }}
+                      className="px-4 py-2 text-[#8DB2D4] hover:bg-[#1B2256] cursor-pointer text-base"
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <button
+              onClick={fetchQuestions}
+              className="bg-gradient-to-r from-[#FF7700] to-[#FFA600] text-black px-6 py-2 rounded-lg font-medium hover:shadow-lg hover:shadow-[#FF7700]/25 transition-all duration-300"
+            >
+              Search
+            </button>
+            <button
+              onClick={() => setShowFilters(v => !v)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#8DB2D4]/40 text-[#8DB2D4] hover:bg-[#1B2256]/40 transition-all duration-200 ml-2"
+            >
+              <Filter size={18} />
+              Filter
+              {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+          </div>
+          {showFilters && (
+            <div className="flex flex-wrap gap-3 mt-2 bg-[#0A0F2C]/60 p-4 rounded-xl border border-[#1B2256]/40">
+              <input
+                type="text"
+                placeholder="Company"
+                value={company}
+                onChange={e => setCompany(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-[#0E143A] text-white border border-[#1B2256]/40 focus:border-[#8DB2D4] focus:outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Role"
+                value={role}
+                onChange={e => setRole(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-[#0E143A] text-white border border-[#1B2256]/40 focus:border-[#8DB2D4] focus:outline-none"
+              />
+              <select
+                value={difficulty}
+                onChange={e => setDifficulty(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-[#0E143A] text-white border border-[#1B2256]/40 focus:border-[#8DB2D4] focus:outline-none"
+              >
+                <option value="">Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Tag"
+                value={tag}
+                onChange={e => setTag(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-[#0E143A] text-white border border-[#1B2256]/40 focus:border-[#8DB2D4] focus:outline-none"
+              />
+              <button
+                onClick={fetchQuestions}
+                className="px-4 py-2 rounded-lg bg-[#FF7700] text-black font-semibold hover:bg-[#FFA600] transition-all duration-200"
+              >Apply</button>
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2 rounded-lg bg-[#1B2256] text-[#8DB2D4] font-semibold hover:bg-[#232B4A] transition-all duration-200"
+              >Clear</button>
+            </div>
+          )}
         </div>
 
         {/* Questions */}
