@@ -10,7 +10,7 @@
     box-shadow: 0 0 0 0 rgba(255,119,0,0);
   }
 }
-
+/* Is this working */
 .animate-chatbot-pulse {
   animation: chatbot-pulse 1.5s infinite;
 }
