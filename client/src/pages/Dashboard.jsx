@@ -262,13 +262,13 @@ const Dashboard = () => {
               onClick={() => navigate("/app/submit-question")}
               gradient="from-[#FF7700] to-[#FF5500]"
             /> */}
-            {/* <ActionCard
+            <ActionCard
               icon={AwardIcon}
               label="Career Roadmap"
               description="Find your perfect career path"
               onClick={() => navigate("/app/roadmap-finder")}
               gradient="from-[#FF7700] to-[#FF5500]"
-            /> */}
+            />
             <ActionCard
               icon={UsersIcon}
               label="Resources"
