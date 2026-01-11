@@ -1,6 +1,6 @@
 import express from 'express'
 import { submitInterviewQuestion,getInterviewQuestions } from '../controllers/interviewQuestionController.js'
-import { authMiddleware } from '../middlewares/authMiddleware.js'
+import authMiddleware from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
