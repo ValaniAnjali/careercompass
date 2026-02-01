@@ -1,0 +1,46 @@
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 200px;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar p {
+  margin: 15px 0;
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  background: #f9fafb;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+input {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 250px;
+}
+
+button {
+  padding: 8px 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
