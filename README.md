@@ -1,5 +1,8 @@
 # Career Compass
 
+you can explore here: https://careercompassss.netlify.app/
+
+
 Career Compass is a comprehensive web application designed to guide users through their career paths by providing personalized roadmaps, skill recommendations, interview questions, and resume generation. Built using the MERN stack, this platform empowers users to enhance their skills and plan their career journeys efficiently.
 
 ---

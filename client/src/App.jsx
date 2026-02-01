@@ -19,6 +19,7 @@ import ResourceSharing from './pages/ResourceSharing'
 import InterviewQuestion from './pages/InterviewQuestion'
 
 import ResourceUpload from './pages/ResourceUpload'
+import RoadmapUpload from './pages/RoadmapUpload'
 
 // Just checking if it works
 
@@ -65,7 +66,8 @@ function App() {
           {/* <Route path='interview-questions' element={<ViewInterviewQue />} /> */}
           <Route path='interview-questions' element={<InterviewQuestion />} />
           <Route path='submit-question' element={<SubmitInterviewQue />} />
-          <Route path='roadmap-finder' element={<RoadmapFinder />} />
+          <Route path='/app/roadmap-finder' element={<RoadmapFinder />} />
+          <Route path="/app/roadmap-upload" element={<RoadmapUpload />} />
           <Route path='resources' element={<ResourceSharing />} />
           <Route path='upload-resource' element={<ResourceUpload />} />
           {/* <Route path='upload-resource' element={<ResourceUpload />} /> */}

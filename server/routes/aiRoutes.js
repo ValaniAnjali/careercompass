@@ -1,6 +1,6 @@
 import express from 'express'
 import { enhanceJobDescription, enhanceProfessionalSummary, uploadResume } from '../controllers/aiController.js';
-import protect from '../middlewares/authMiddleWare.js';
+import protect from '../middlewares/authMiddleware.js';
 
 // import { updateResume } from '../controllers/resumeController.js';
 const aiRouter=express.Router();
