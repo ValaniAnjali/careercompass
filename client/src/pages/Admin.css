@@ -1,0 +1,202 @@
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.admin-sidebar {
+  width: 220px;
+  background: #111827;
+  color: white;
+  padding: 24px; /* slightly more padding */
+}
+.admin-sidebar h2 {
+  font-size: 1.4rem; /* increase title size slightly */
+  margin: 0 0 12px 0; /* add spacing below title */
+}
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* more spacing between items */
+  margin-top: 16px;
+}
+.nav-item {
+  background: #1F2937;
+  color: #E5E7EB;
+  border: 1px solid #1B2256;
+  padding: 12px 14px; /* a bit more padding */
+  border-radius: 10px; /* slightly more rounded */
+  font-size: 0.95rem; /* slightly larger font */
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  text-align: left;
+  cursor: pointer;
+}
+.nav-item:hover {
+  background: #0E143A;
+}
+.nav-item.active {
+  background: #0E143A;
+  border-color: #2563eb;
+}
+
+.admin-sidebar p {
+  margin: 12px 0;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 30px;
+  background: #0A0F2C; /* match project dark theme */
+}
+
+.admin-card {
+  background: #0E143A; /* dark card */
+  border: 1px solid #1B2256;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  color: #E5E7EB;
+}
+
+.admin-card input {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.resource-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resource-title {
+  margin: 0;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.resource-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #8DB2D4;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.status.pending {
+  background: #FF7700;
+  color: #111827;
+}
+.status.approved {
+  background: #10B981;
+  color: #062b22;
+}
+.status.rejected {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 8px 14px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.approve-btn {
+  background: #2563eb; /* blue */
+}
+.reject-btn {
+  background: #dc2626; /* red */
+}
+
+/* User management styles */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.form-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+.delete-btn {
+  background: #dc2626;
+}
+.secondary-btn {
+  background: #374151;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.modal-card {
+  background: #ffffff;
+  color: #111827;
+  width: 90%;
+  max-width: 520px;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.modal-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.muted {
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Simple table styles matching light main theme */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table th, .admin-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #1B2256;
+  color: #E5E7EB;
+}
+.admin-table thead th {
+  background: #0E143A;
+  font-weight: 600;
+}
+.admin-table tr:hover td {
+  background: #0E143A;
+}
