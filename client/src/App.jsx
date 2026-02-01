@@ -19,7 +19,12 @@ import ResourceSharing from './pages/ResourceSharing'
 import InterviewQuestion from './pages/InterviewQuestion'
 
 import ResourceUpload from './pages/ResourceUpload'
+<<<<<<< Updated upstream
 import RoadmapUpload from './pages/RoadmapUpload'
+=======
+import Admin from './pages/Admin'
+import RequireAdmin from './components/RequireAdmin'
+>>>>>>> Stashed changes
 
 // Just checking if it works
 
@@ -72,6 +77,8 @@ function App() {
           <Route path='upload-resource' element={<ResourceUpload />} />
           {/* <Route path='upload-resource' element={<ResourceUpload />} /> */}
         </Route>
+        <Route path='/admin' element={<RequireAdmin><Admin /></RequireAdmin>} />
+
 
         <Route path='view/:resumeId' element={<Preview />} />
       </Routes>
