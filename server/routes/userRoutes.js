@@ -9,7 +9,7 @@ userRouter.get('/data',protect,getUserById)
 userRouter.get('/resumes',protect,getUserResumes)
 userRouter.put('/update', protect, updateUser);
 
-// Admin-like endpoints
+
 userRouter.get('/', getAllUsers)
 userRouter.delete('/:id', deleteUserById)
 
